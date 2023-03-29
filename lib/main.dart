@@ -5,7 +5,9 @@ import 'package:time_control/responsive/responsivelayout.dart';
 
 void main() {
   runApp(const MaterialApp(
-    home: ResponsiveLayout(mobileScreen: MobileScreen(), desktopScreen: DesktopScreen()),
+    home: ResponsiveLayout(
+      mobileScreen: MobileScreen(),
+      desktopScreen: DesktopScreen(),
+    ),
   ));
 }
-
