@@ -18,9 +18,7 @@ class _DashboardState extends State<Dashboard> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      theme: ThemeData(
-        primaryColor: Colors.white,
-      ),
+      theme: ThemeData.light(useMaterial3: true),
       home: Scaffold(
         body: Row(
           children: [
@@ -39,7 +37,9 @@ class _DashboardState extends State<Dashboard> {
                       children: [
                         Container(
                           decoration: BoxDecoration(
-                            color: currentScreen == 0 ? Colors.lightBlueAccent : null,
+                            color: currentScreen == 0
+                                ? Colors.lightBlueAccent
+                                : null,
                           ),
                           padding: const EdgeInsets.only(left: 15),
                           child: ListTile(
@@ -53,7 +53,9 @@ class _DashboardState extends State<Dashboard> {
                         ),
                         Container(
                           decoration: BoxDecoration(
-                            color: currentScreen == 1 ? Colors.lightBlueAccent : null,
+                            color: currentScreen == 1
+                                ? Colors.lightBlueAccent
+                                : null,
                           ),
                           padding: const EdgeInsets.only(left: 15),
                           child: ListTile(
@@ -67,7 +69,9 @@ class _DashboardState extends State<Dashboard> {
                         ),
                         Container(
                           decoration: BoxDecoration(
-                            color: currentScreen == 2 ? Colors.lightBlueAccent : null,
+                            color: currentScreen == 2
+                                ? Colors.lightBlueAccent
+                                : null,
                           ),
                           padding: const EdgeInsets.only(left: 15),
                           child: const ListTile(
@@ -76,7 +80,9 @@ class _DashboardState extends State<Dashboard> {
                         ),
                         Container(
                           decoration: BoxDecoration(
-                            color: currentScreen == 3 ? Colors.lightBlueAccent : null,
+                            color: currentScreen == 3
+                                ? Colors.lightBlueAccent
+                                : null,
                           ),
                           padding: const EdgeInsets.only(left: 15),
                           child: const ListTile(
@@ -85,7 +91,9 @@ class _DashboardState extends State<Dashboard> {
                         ),
                         Container(
                           decoration: BoxDecoration(
-                            color: currentScreen == 4 ? Colors.lightBlueAccent : null,
+                            color: currentScreen == 4
+                                ? Colors.lightBlueAccent
+                                : null,
                           ),
                           padding: const EdgeInsets.only(left: 15),
                           child: const ListTile(
@@ -97,21 +105,21 @@ class _DashboardState extends State<Dashboard> {
                     ),
                     Container(
                       decoration: BoxDecoration(
-                            color: currentScreen == 5? Colors.lightBlueAccent : null,
-                          ),
-                          
+                        color:
+                            currentScreen == 5 ? Colors.lightBlueAccent : null,
+                      ),
                       child: const ListTile(
                         title: Text("Message"),
                       ),
                     ),
                     ExpansionTile(
-                      
-                      
                       title: const Text("Staff"),
                       children: [
                         Container(
                           decoration: BoxDecoration(
-                            color: currentScreen == 6 ? Colors.lightBlueAccent : null,
+                            color: currentScreen == 6
+                                ? Colors.lightBlueAccent
+                                : null,
                           ),
                           padding: const EdgeInsets.only(left: 15),
                           child: const ListTile(
@@ -120,7 +128,9 @@ class _DashboardState extends State<Dashboard> {
                         ),
                         Container(
                           decoration: BoxDecoration(
-                            color: currentScreen == 7 ? Colors.lightBlueAccent : null,
+                            color: currentScreen == 7
+                                ? Colors.lightBlueAccent
+                                : null,
                           ),
                           padding: const EdgeInsets.only(left: 15),
                           child: const ListTile(

@@ -1,12 +1,11 @@
 import 'dart:convert';
-import 'dart:io';
 
 import 'package:file_selector/file_selector.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:time_control/models/worker.dart';
+import 'package:time_control/services/addtask.dart';
 import 'package:time_control/services/getworker.dart';
-import 'package:http/http.dart' as http;
 
 class NewTask extends StatefulWidget {
   const NewTask({super.key});
@@ -16,7 +15,7 @@ class NewTask extends StatefulWidget {
 }
 
 class _NewTaskState extends State<NewTask> {
-  List b64edImgs = [];
+  List<Map<String, String>> b64edImgs = [];
 
   final taskTitleController = TextEditingController();
   final taskSummaryController = TextEditingController();
@@ -24,7 +23,7 @@ class _NewTaskState extends State<NewTask> {
   final expectedCostController = TextEditingController();
   String taskTitle = '';
   String taskSummary = '';
-  File? attachment;
+  XFile? attachment;
   String assignWorker = '';
   int? expectedDuration;
   int? expectedCost;
@@ -78,7 +77,9 @@ class _NewTaskState extends State<NewTask> {
                 onPressed: () async {
                   b64edImgs.clear();
                   await imagesPicker();
-                  setState(() {});
+                  setState(() {
+                    debugPrint("Added Image");
+                  });
                 },
                 child: b64edImgs.isNotEmpty
                     ? Text("${b64edImgs.length} Images Added")
@@ -94,10 +95,13 @@ class _NewTaskState extends State<NewTask> {
                     const EdgeInsets.all(20),
                   ),
                 ),
-                onPressed: () {
-                  attachmentPicker();
+                onPressed: () async {
+                  await attachmentPicker();
+                  setState(() {});
                 },
-                child: const Text("Attachment"),
+                child: attachment == null
+                    ? const Text("Attachment")
+                    : const Text("1 Attachment"),
               ),
             ],
           ),
@@ -180,14 +184,24 @@ class _NewTaskState extends State<NewTask> {
                   ),
                 ),
                 onPressed: () async {
+                  debugPrint("Somebody Click Me");
                   debugPrint(taskTitle);
                   debugPrint(taskSummary);
                   debugPrint(expectedDuration.toString());
                   debugPrint(expectedCost.toString());
                   debugPrint(dropDownCurrentValue);
-                  debugPrint("$attachment");
-                  debugPrint(b64edImgs.toString());
-                  await postData();
+                  debugPrint("Attachment $attachment");
+                  debugPrint("imagelist ${b64edImgs.toString()}");
+                  await AddTask(
+                    taskTitle: taskTitle,
+                    workerName: dropDownCurrentValue!,
+                    description: taskSummary,
+                    imageList: b64edImgs,
+                    expectedDuration: expectedDuration!,
+                    expectedCost: expectedCost!,
+                    attachment: attachment!,
+                  ).postData();
+
                   taskTitleController.clear();
                   taskSummaryController.clear();
                   expectedCostController.clear();
@@ -216,7 +230,19 @@ class _NewTaskState extends State<NewTask> {
       (value) {
         for (int i = 0; i < value.length; i++) {
           value[i].readAsBytes().then((value) {
-            b64edImgs.add({"taskImage": base64.encode(value)});
+            print(value);
+            b64edImgs.add(
+              {
+                "taskImage": base64.encode(value),
+              },
+            );
+            print(b64edImgs);
+
+            // b64edImgs!.add(
+            //   {
+            //     "taskImage": base64.encode(value),
+            //   },
+            // );
           });
         }
       },
@@ -231,36 +257,6 @@ class _NewTaskState extends State<NewTask> {
     final XFile? file = await openFile(
       acceptedTypeGroups: <XTypeGroup>[typeGroup],
     );
-    attachment = File(file!.path);
-  }
-
-  Future postData() async {
-    const url = 'https://hrbackend.cyclic.app/api/CreateTask';
-    //final attachmentBytes = attachment!.readAsBytesSync();
-    var payload = {
-      'title': taskTitle,
-      'worker': dropDownCurrentValue,
-      'description': taskSummary,
-      'taskImageList': b64edImgs,
-      'expectedDurationDay': expectedDuration,
-      'expectedCost': expectedCost,
-      'attachment': {
-        'fileName': attachment!.path.split('/').last,
-        "data": await attachment!.readAsBytes()
-      }
-    };
-    final response = await http.post(
-      Uri.parse('url'),
-      body: json.encode(payload),
-      headers: {'Content-Type': 'application/json'},
-    );
-
-    if (response.statusCode >= 200 && response.statusCode < 300) {
-      debugPrint(
-          'Task data sent successfully: Response Code: ${response.statusCode}');
-    } else {
-      debugPrint(
-          'Failed to send task data. Error code: ${response.statusCode}');
-    }
+    attachment = file;
   }
 }

@@ -1,8 +1,9 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:time_control/models/task.dart';
+import 'package:time_control/constants/restapi.dart' as restapi;
 
-String url = "https://hrbackend.cyclic.app/api/GetTasks";
+String url = restapi.url + restapi.getTasks;
 
 Future<List<Task>> getTasks() async {
   final response = await http.get(Uri.parse(url));
